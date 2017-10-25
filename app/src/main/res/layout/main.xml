@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+xmlns:tools="http://schemas.android.com/tools"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:ads="http://schemas.android.com/apk/res-auto"
+android:id="@+id/widget31"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:background="@drawable/background"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/trackthumbnail" />
+
+    <ImageButton
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/nexticon"
+        android:layout_alignTop="@+id/ButtonTestPlayPause"
+        android:layout_toRightOf="@+id/imageView1"
+        android:paddingLeft="10dp"
+        android:layout_toEndOf="@+id/imageView1" />
+
+
+        <TextView
+            android:id="@+id/textSongTitle"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:minHeight = "50dp"
+            android:maxHeight = "60dp"
+            android:layout_below="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:maxLength="55"
+            android:text="Tocky Vibes"
+            android:textColor="@color/theme_white" />
+
+        <TextView
+            android:id="@+id/textUploadedBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textSongTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            android:fontFamily="sans-serif"
+            android:maxLength="25"
+            android:text="uploaded by nash"
+            android:textColor="@color/theme_white" />
+
+        <ImageButton
+            android:id="@+id/ButtonTestPlayPause"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="TestPlayPause"
+            android:onClick="onClick"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:src="@drawable/playicon"
+            android:layout_alignTop="@+id/likeButton"
+            android:layout_toRightOf="@+id/likeButton"
+            android:layout_toEndOf="@+id/likeButton" />
+
+        <ImageButton
+            android:id="@+id/dislikeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:paddingRight="15dp"
+            android:src="@drawable/thumbsdown"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/SeekBarTestPlay"
+            android:layout_toLeftOf="@+id/likeButton"
+            android:layout_toStartOf="@+id/likeButton" />
+
+        <ImageButton
+            android:id="@+id/likeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:paddingRight="10dp"
+            android:src="@drawable/thumbsup"
+            android:layout_alignTop="@+id/dislikeButton"
+            android:layout_alignLeft="@+id/imageView1"
+            android:layout_alignStart="@+id/imageView1" />
+
+        <SeekBar
+            android:id="@+id/SeekBarTestPlay"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:maxHeight="5dp"
+            android:minHeight="3dp"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@+id/textSongTitle"
+            android:layout_alignEnd="@+id/textSongTitle"
+            android:layout_toRightOf="@+id/duration1"
+            android:layout_toEndOf="@+id/duration1" />
+        
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-0971989469660421/8974773654" >
+        </com.google.android.gms.ads.AdView>
+
+        <TextView
+            android:id="@+id/duration1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0:00"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/dislikeButton"
+            android:layout_toStartOf="@+id/dislikeButton" />
+
+        <TextView
+            android:id="@+id/duration2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0:00"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/nextButton"
+            android:layout_toEndOf="@+id/nextButton" />
+
+    <ImageButton
+        android:id="@+id/DownloadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:src="@drawable/download"
+        android:layout_below="@+id/ButtonTestPlayPause"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Download"
+        android:id="@+id/downloadTextView"
+        android:layout_below="@+id/DownloadButton"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

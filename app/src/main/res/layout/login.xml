@@ -1,0 +1,86 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="com.tashtin.zimvibes.LoginActivity" >
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:ems="10"
+        android:hint="@string/email"
+        android:paddingLeft="10dp"
+        android:background="@drawable/toptextfieldbg"
+        android:textColor="@color/theme_gray"
+        android:inputType="textEmailAddress"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/editText1"
+        android:layout_marginTop="0dp"
+        android:ems="10"
+        android:hint="@string/password"
+        android:paddingLeft="10dp"
+        android:background="@drawable/bottomtextfieldbg"
+        android:textColor="@color/theme_gray"
+        android:inputType="textPassword" />
+
+        <TextView
+        android:id="@+id/forgot_password"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/button1"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:lines="1"
+        android:text="Forgot your password?"
+        android:textColor="@color/theme_white"
+        android:onClick="onClickForgotPassword"
+        android:textSize="12sp" />
+        
+    <TextView
+        android:id="@+id/sign_up_link"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="27dp"
+        android:gravity="center"
+        android:lines="1"
+        android:text="@string/don_t_have_an_account_sign_up"
+        android:textColor="@color/theme_gray"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:textSize="14sp"
+        android:background="@drawable/loginbtn"/>
+
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="39dp"
+        android:layout_below="@+id/forgot_password"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

@@ -1,0 +1,63 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context="com.tashtin.zimvibes.SignUpActivity" >
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="74dp"
+        android:ems="10"
+        android:hint="Email"
+        android:paddingLeft="10dp"
+        android:background="@drawable/toptextfieldbg"
+        android:textColor="@color/theme_gray"
+        android:inputType="textEmailAddress" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/signupbtn"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText2"
+        android:layout_below="@+id/editText2"
+        android:layout_marginTop="0dp"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:paddingLeft="10dp"
+        android:background="@drawable/bottomtextfieldbg"
+        android:inputType="textPassword"
+        android:textColor="@color/theme_gray" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/editText1"
+        android:layout_marginTop="0dp"
+        android:ems="10"
+        android:hint="Password"
+        android:paddingLeft="10dp"
+        android:background="@drawable/middletextfieldbg"
+        android:inputType="textPassword"
+        android:textColor="@color/theme_gray" />
+    
+</RelativeLayout>

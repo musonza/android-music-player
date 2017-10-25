@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ZimVibes</string>
+    <string name="testsong_20_sec">https://api.soundcloud.com/tracks/157801160/stream?client_id=CLIENT_ID_HERE</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_login">Login</string>
+    <string name="title_activity_main">ZimVibes</string>
+	<string name="title_activity_login">Login</string>
+	<string name="title_activity_signup">Sign Up</string>
+	<string name="title_activity_forgot">Reset Password</string>
+	<string name="ad_unit_id">ca-app-pub-xxxxxxxxxxxxxxxxx</string>
+    <string name="facebook_app_id">FACEBOOK_APP_ID_HERE</string>
+    <string name="enter_your_email_below_and_we_will_email_you_password_reset_instructions">Enter your email below and we will email you password reset instructions.</string>
+    <string name="don_t_have_an_account_sign_up">Don\'t have an account? Sign Up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+</resources>

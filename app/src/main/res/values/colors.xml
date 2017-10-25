@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="seekbar_bg">#141414</color>
+	<color name="seekbar_progress">#a53130</color>
+	<color name="seekbar_sec_progress">#875e5e</color>
+	<color name="theme_blue">#0099ff</color>  
+	<color name="theme_btn_color">#FFFFFF</color>  
+	<color name="theme_light_blue">#4A87EE</color>
+	<color name="theme_green">#46B525</color>
+	<color name="theme_orange">#ff6600</color>
+	<color name="theme_header_blue">#0099ff</color>
+	<color name="theme_gray">#999999</color>
+	<color name="theme_black">#000000</color>
+	<color name="theme_white">#FFFFFF</color>  
+</resources>
