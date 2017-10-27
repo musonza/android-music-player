@@ -17,78 +17,78 @@ import com.octo.android.robospice.request.SpiceRequest;
 
 public class GetRequest extends SpiceRequest<String> {
 
-	private String api;
+    private String api;
 
-	public GetRequest(Class<String> Class) {
-		super(Class);
-	}
+    public GetRequest(Class<String> Class) {
+        super(Class);
+    }
 
-	@Override
-	public String loadDataFromNetwork() throws Exception {
+    @Override
+    public String loadDataFromNetwork() throws Exception {
 
-		String result = "";
-		//	AndroidHttpClient httpClient = GlobalContext.getHttpClient();
-		HttpGet httpGet = new HttpGet(String.format(API.SERVER_URL + "%s", api));
-		Log.i(getClass().getSimpleName(), "Request: " + httpGet.getURI());
+        String result = "";
+        //	AndroidHttpClient httpClient = GlobalContext.getHttpClient();
+        HttpGet httpGet = new HttpGet(String.format(API.SERVER_URL + "%s", api));
+        Log.i(getClass().getSimpleName(), "Request: " + httpGet.getURI());
 
-		//	trustAllHttpsCertificates();
+        //	trustAllHttpsCertificates();
 
-		try {
-			//	HttpClient httpClient = getNewHttpClient();
-			HttpClient httpClient = GlobalContext.getHttpClient();
+        try {
+            //	HttpClient httpClient = getNewHttpClient();
+            HttpClient httpClient = GlobalContext.getHttpClient();
 
-			HttpResponse response = httpClient.execute(httpGet, GlobalContext.getLocalContext());
-			System.out.println(getClass().getSimpleName() + ": " + response.getStatusLine().getStatusCode());
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-				//	result = new String(EntityUtils.toString(entity));
-				InputStream instream = entity.getContent();
-				result = convertStreamToString(instream);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+            HttpResponse response = httpClient.execute(httpGet, GlobalContext.getLocalContext());
+            System.out.println(getClass().getSimpleName() + ": " + response.getStatusLine().getStatusCode());
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                //	result = new String(EntityUtils.toString(entity));
+                InputStream instream = entity.getContent();
+                result = convertStreamToString(instream);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		logInfo(result);
+        logInfo(result);
 
-		//	httpClient.close();
+        //	httpClient.close();
 
-		return result.trim();
-	}
+        return result.trim();
+    }
 
-	public void setApi(String api) {
-		this.api = api;
-	}
+    public void setApi(String api) {
+        this.api = api;
+    }
 
-	public static final String convertStreamToString(InputStream is) {
+    public static final String convertStreamToString(InputStream is) {
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		StringBuilder sb = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
 
-		String line = null;
-		try {
-			while ((line = reader.readLine()) != null) {
-				sb.append((line + "\n"));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				is.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append((line + "\n"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	private void logInfo(String str) {
-		if(str.length() > 4000) {
-			Log.i(getClass().getSimpleName(), "Result: " + str.substring(0, 4000));
-			logInfo(str.substring(4000));
-		} else
-			Log.i(getClass().getSimpleName(), "Result: " + str);
-	}
+    private void logInfo(String str) {
+        if (str.length() > 4000) {
+            Log.i(getClass().getSimpleName(), "Result: " + str.substring(0, 4000));
+            logInfo(str.substring(4000));
+        } else
+            Log.i(getClass().getSimpleName(), "Result: " + str);
+    }
 }
 

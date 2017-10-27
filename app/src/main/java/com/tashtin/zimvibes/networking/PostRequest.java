@@ -16,85 +16,85 @@ import android.util.Log;
 import com.tashtin.zimvibes.GlobalContext;
 import com.octo.android.robospice.request.SpiceRequest;
 
-public class PostRequest extends SpiceRequest<String>{
+public class PostRequest extends SpiceRequest<String> {
 
-	private String api;
-	private UrlEncodedFormEntity entity;
-	
-	public PostRequest(Class<String> Class) {
-		super(Class);
-		// TODO Auto-generated constructor stub
-	}
+    private String api;
+    private UrlEncodedFormEntity entity;
 
-	@Override
-	public String loadDataFromNetwork() throws Exception {
-		
-		String result = "";
-		HttpPost httpPost = new HttpPost(String.format(API.SERVER_URL + "%s", api));
-		Log.i(getClass().getSimpleName(), "Request: " + httpPost.getURI());
-		
-		try {
-			if(entity != null)
-				httpPost.setEntity(entity);
-			
-			HttpClient httpClient = GlobalContext.getHttpClient();
-			HttpResponse response = httpClient.execute(httpPost, GlobalContext.getLocalContext());
-			System.out.println(getClass().getSimpleName() + ": " + response.getStatusLine().getStatusCode());
-			HttpEntity entity = response.getEntity();
-			
-			if (entity != null) {
-				// result = new String(EntityUtils.toString(entity));
-				InputStream instream = entity.getContent();
-				result = convertStreamToString(instream);
-			}
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		logInfo(result);
-		// httpClient.close();
-		return result.trim();
-	}
+    public PostRequest(Class<String> Class) {
+        super(Class);
+        // TODO Auto-generated constructor stub
+    }
 
-	public void setApi(String api) {
-		this.api = api;
-	}
-	
+    @Override
+    public String loadDataFromNetwork() throws Exception {
 
-	public void setEntity(UrlEncodedFormEntity entity) {
-		this.entity = entity;
-	}
-	
-	private String convertStreamToString(InputStream is) {
+        String result = "";
+        HttpPost httpPost = new HttpPost(String.format(API.SERVER_URL + "%s", api));
+        Log.i(getClass().getSimpleName(), "Request: " + httpPost.getURI());
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		StringBuilder sb = new StringBuilder();
-		String line = null;
-		
-		try {
-			while ((line = reader.readLine()) != null) {
-			sb.append((line + "\n"));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				is.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return sb.toString();
-	}
-	
-	private void logInfo(String str) {
-		if(str.length() > 4000) {
-			Log.i(getClass().getSimpleName(), "Result: " + str.substring(0, 4000));
-			logInfo(str.substring(4000));
-		} else
-			Log.i(getClass().getSimpleName(), "Result: " + str);
-	}
-	
+        try {
+            if (entity != null)
+                httpPost.setEntity(entity);
+
+            HttpClient httpClient = GlobalContext.getHttpClient();
+            HttpResponse response = httpClient.execute(httpPost, GlobalContext.getLocalContext());
+            System.out.println(getClass().getSimpleName() + ": " + response.getStatusLine().getStatusCode());
+            HttpEntity entity = response.getEntity();
+
+            if (entity != null) {
+                // result = new String(EntityUtils.toString(entity));
+                InputStream instream = entity.getContent();
+                result = convertStreamToString(instream);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        logInfo(result);
+        // httpClient.close();
+        return result.trim();
+    }
+
+    public void setApi(String api) {
+        this.api = api;
+    }
+
+
+    public void setEntity(UrlEncodedFormEntity entity) {
+        this.entity = entity;
+    }
+
+    private String convertStreamToString(InputStream is) {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append((line + "\n"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
+
+    private void logInfo(String str) {
+        if (str.length() > 4000) {
+            Log.i(getClass().getSimpleName(), "Result: " + str.substring(0, 4000));
+            logInfo(str.substring(4000));
+        } else
+            Log.i(getClass().getSimpleName(), "Result: " + str);
+    }
+
 }

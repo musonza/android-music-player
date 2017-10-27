@@ -45,191 +45,213 @@ import android.widget.ListView;
 
 public class MainActivity extends ListActivity {
 
-	Menu menu;
-	
-	private final SpiceManager spiceManager = new SpiceManager(UncachedSpiceService.class);
-	
-	private ArrayAdapter<?> stationsArrayAdapter;
-	List<Station> stations = new ArrayList<Station>();
-	
-	ProgressDialog progress;
-	
-	String[] station_songs;
-	
-	List<StationSong> songs = new ArrayList<StationSong>();
-	
-	SharedPreferences prefs;
-	
-	Editor editor;
-	
-	long current_song_index = 0;
+    Menu menu;
+
+    private final SpiceManager spiceManager = new SpiceManager(UncachedSpiceService.class);
+
+    private ArrayAdapter<?> stationsArrayAdapter;
+    List<Station> stations = new ArrayList<Station>();
+
+    ProgressDialog progress;
+
+    String[] station_songs;
+
+    List<StationSong> songs = new ArrayList<StationSong>();
+
+    SharedPreferences prefs;
+
+    Editor editor;
+
+    long current_song_index = 0;
 
     String access_token;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		
-		if(GlobalContext.getHttpClient() == null || GlobalContext.getLocalContext() == null) {
-			GlobalContext.configureHttpService();
-		}
-		
-		createStations();
-		
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        if (GlobalContext.getHttpClient() == null || GlobalContext.getLocalContext() == null) {
+            GlobalContext.configureHttpService();
+        }
+
+        createStations();
+
         prefs = getSharedPreferences("zimvibes_prefs", MODE_PRIVATE);
         editor = prefs.edit();
         current_song_index = prefs.getLong("current_song_index", 0);
 
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			invalidateOptionsMenu();
-		}
-	}
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            invalidateOptionsMenu();
+        }
+    }
 
-	public void  createStations()
-	{		
-		progress = new ProgressDialog(this);
-		progress.setMessage("loading stations...");
-		progress.show();
-		
-		String accesstoken = "";
-		
-		GetStationsTask request = new GetStationsTask(accesstoken);
-		getSpiceManager().execute(request, new GetStationsRequestListener());
-		
-	}
+    /**
+     * This method will be called when the activity is created.
+     * It will get a list of music / radio stations
+     */
+    public void createStations() {
+        progress = new ProgressDialog(this);
+        progress.setMessage("loading stations...");
+        progress.show();
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String accesstoken = "";
 
-		if (requestCode == 1) {
-			if(resultCode == RESULT_OK){
-				menu.findItem(R.id.action_login).setVisible(false);
-				menu.findItem(R.id.action_logout).setVisible(true);
-			}
-		}
-	}
-	
-	public void renderStations(List<Station> stations)
-	{
-		stationsArrayAdapter = new StationAdapter(this, stations);
-		setListAdapter(stationsArrayAdapter);
-	}
-	
-	 @Override
-	 protected void onListItemClick(ListView l, View v, int position, long id) {
-		 ListAdapter list = getListAdapter();
-		 Station station = (Station) list.getItem(position);
+        GetStationsTask request = new GetStationsTask(accesstoken);
+        getSpiceManager().execute(request, new GetStationsRequestListener());
 
-         if(station.getFavorite().equals("1") && !isLoggedIn()){
+    }
 
-             new AlertDialog.Builder(MainActivity.this)
-                     .setTitle("Notice!")
-                     .setMessage("You have to login to play your liked songs")
-                     .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-                         @Override
-                         public void onClick(DialogInterface dialog, int arg1) {
-                             dialog.dismiss();
-                             getLogin();
-                         }
-                     }).create().show();
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                menu.findItem(R.id.action_login).setVisible(false);
+                menu.findItem(R.id.action_logout).setVisible(true);
+            }
+        }
+    }
 
-             return;
-         }
+    /**
+     * Renders a list of the radio stations in a ListView
+     *
+     * @param stations List of stations to display
+     */
+    public void renderStations(List<Station> stations) {
+        stationsArrayAdapter = new StationAdapter(this, stations);
+        setListAdapter(stationsArrayAdapter);
+    }
 
-         try {
-             l.getChildAt(GlobalContext.getStationIndex()).setBackgroundColor(Color.argb(0, 0, 0, 0));
-         }catch (Exception e){
+    /**
+     * This method will be called when an item in the list is of stations selected.
+     *
+     * @param l        The ListView where the click happened
+     * @param v        The view that was clicked within the ListView
+     * @param position The position of the view in the list
+     * @param id       The row id of the item that was clicked
+     */
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        ListAdapter list = getListAdapter();
+        Station station = (Station) list.getItem(position);
 
-         }
+        if (station.getFavorite().equals("1") && !isLoggedIn()) {
 
-         l.getChildAt(position).setBackgroundColor(Color.GRAY);
-		 
-		 //check if same station
-		 //go to activity
-		 if(Long.valueOf(station.getId()) == prefs.getLong("station_id", 0) &&
-				 GlobalContext.getCurrentSongIndex() < GlobalContext.getSongs().size() -1)
-		 {
-			Intent intent = new Intent(getApplicationContext(), StreamingMp3Player.class);
-			intent.putExtra("station_id", station.getId());
-			startActivity(intent); 
-		 }else{
-			 //get songs
-			 GlobalContext.setCurrentSongIndex(0);
-			 
-			 progress = new ProgressDialog(this);
-			 progress.setMessage("loading songs...");
-			 progress.show();
-			 
-			 editor.putLong("station_id", 0);
-			 editor.commit();
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Notice!")
+                    .setMessage("You have to login to play your liked songs")
+                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
 
-             Boolean isAuth;
+                        @Override
+                        public void onClick(DialogInterface dialog, int arg1) {
+                            dialog.dismiss();
+                            getLogin();
+                        }
+                    }).create().show();
 
-			 isAuth = station.getFavorite().equals("1");
-			 
-			 GetStationSongsTask request = new GetStationSongsTask(station.getId(), access_token, isAuth);
-			 getSpiceManager().execute(request, new GetStationSongsRequestListener(station.getId(), position));
-		 }
-	 }
+            return;
+        }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		this.menu = menu;
+        try {
+            l.getChildAt(GlobalContext.getStationIndex()).setBackgroundColor(Color.argb(0, 0, 0, 0));
+        } catch (Exception e) {
+
+        }
+
+        l.getChildAt(position).setBackgroundColor(Color.GRAY);
+
+        //check if same station
+        //go to activity
+        if (Long.valueOf(station.getId()) == prefs.getLong("station_id", 0) &&
+                GlobalContext.getCurrentSongIndex() < GlobalContext.getSongs().size() - 1) {
+            Intent intent = new Intent(getApplicationContext(), StreamingMp3Player.class);
+            intent.putExtra("station_id", station.getId());
+            startActivity(intent);
+        } else {
+            //get songs
+            GlobalContext.setCurrentSongIndex(0);
+
+            progress = new ProgressDialog(this);
+            progress.setMessage("loading songs...");
+            progress.show();
+
+            editor.putLong("station_id", 0);
+            editor.commit();
+
+            Boolean isAuth;
+
+            isAuth = station.getFavorite().equals("1");
+
+            GetStationSongsTask request = new GetStationSongsTask(station.getId(), access_token, isAuth);
+            getSpiceManager().execute(request, new GetStationSongsRequestListener(station.getId(), position));
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-	}
-	
-	@Override
-	protected void onStart() {
-		spiceManager.start(this);
-		super.onStart();
-	}
-	
-	@Override
-	protected void onStop() {
-		spiceManager.shouldStop();
-		super.onStop();
-	}
-	
-	public SpiceManager getSpiceManager() {
-		return spiceManager;
-	}
+    }
 
-	@Override
-	public boolean onPrepareOptionsMenu (Menu menu){
-		SharedPreferences prefs = getSharedPreferences("zimvibes_prefs", MODE_PRIVATE);
-		String savedUsername = prefs.getString("username", null);
+    @Override
+    protected void onStart() {
+        spiceManager.start(this);
+        super.onStart();
+    }
 
-		if(savedUsername == null){
-			this.menu.findItem(R.id.action_login).setVisible(true);
-			this.menu.findItem(R.id.action_logout).setVisible(false);
-		}else{
-			this.menu.findItem(R.id.action_login).setVisible(false);
-			this.menu.findItem(R.id.action_logout).setVisible(true);
-		}
-		return true;
-	}
+    @Override
+    protected void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
+    }
 
-	public boolean isLoggedIn(){
-		SharedPreferences prefs = getSharedPreferences("zimvibes_prefs", MODE_PRIVATE);
-		String savedUsername = prefs.getString("username", null);
-		access_token = prefs.getString("access_token", null);
+    public SpiceManager getSpiceManager() {
+        return spiceManager;
+    }
 
-		return savedUsername != null;
-	}
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        SharedPreferences prefs = getSharedPreferences("zimvibes_prefs", MODE_PRIVATE);
+        String savedUsername = prefs.getString("username", null);
 
-    public void clearSessionInfo(){
+        if (savedUsername == null) {
+            this.menu.findItem(R.id.action_login).setVisible(true);
+            this.menu.findItem(R.id.action_logout).setVisible(false);
+        } else {
+            this.menu.findItem(R.id.action_login).setVisible(false);
+            this.menu.findItem(R.id.action_logout).setVisible(true);
+        }
+        return true;
+    }
+
+    /**
+     * Checks if logged in in local storage
+     *
+     * @return Boolean
+     */
+    public boolean isLoggedIn() {
+        SharedPreferences prefs = getSharedPreferences("zimvibes_prefs", MODE_PRIVATE);
+        String savedUsername = prefs.getString("username", null);
+        access_token = prefs.getString("access_token", null);
+
+        return savedUsername != null;
+    }
+
+    /**
+     * Clears the local storage session info for the user
+     */
+    public void clearSessionInfo() {
         editor.putString("username", null);
         editor.putString("access_token", null);
         editor.putString("user_id", null);
         editor.commit();
 
-        try{
+        try {
             LoginManager.getInstance().logOut();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -237,130 +259,130 @@ public class MainActivity extends ListActivity {
         menu.findItem(R.id.action_logout).setVisible(true);
     }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_logout) {
-			editor.putString("username", null);
-			editor.putString("access_token", null);
-			editor.putString("user_id", null);
-			editor.commit();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            editor.putString("username", null);
+            editor.putString("access_token", null);
+            editor.putString("user_id", null);
+            editor.commit();
 
-			item.setVisible(false);
-			menu.findItem(R.id.action_login).setVisible(true);
+            item.setVisible(false);
+            menu.findItem(R.id.action_login).setVisible(true);
 
-			return true;
-		}
+            return true;
+        }
 
-		if (id == R.id.action_login) {
+        if (id == R.id.action_login) {
 
-			if(isLoggedIn()){
-				return true;
-			}
+            if (isLoggedIn()) {
+                return true;
+            }
             getLogin();
-			return true;
-		}
+            return true;
+        }
 
-		return super.onOptionsItemSelected(item);
-	}
+        return super.onOptionsItemSelected(item);
+    }
 
-    private void getLogin(){
+    private void getLogin() {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivityForResult(intent, 1);
     }
-	
-	private class GetStationSongsRequestListener implements RequestListener<String>{
-		
-		private String station_id;
+
+    private class GetStationSongsRequestListener implements RequestListener<String> {
+
+        private String station_id;
         int position;
-		
-		public GetStationSongsRequestListener(String station_id, int position){
-			this.station_id = station_id;
+
+        public GetStationSongsRequestListener(String station_id, int position) {
+            this.station_id = station_id;
             this.position = position;
-		}
-		
-		@Override
-		public void onRequestFailure(SpiceException e) {
-			Log.d(getClass().getSimpleName(), "onRequestFailure");
-		}
+        }
 
-		@Override
-		public void onRequestSuccess(String result) {
+        @Override
+        public void onRequestFailure(SpiceException e) {
+            Log.d(getClass().getSimpleName(), "onRequestFailure");
+        }
 
-			try {
-				JSONObject jObject = new JSONObject(result);
-				if (ResultHandler.checkLogStatus(MainActivity.this, jObject)) {
+        @Override
+        public void onRequestSuccess(String result) {
 
-					//songs object
-					JSONArray jArray = jObject.getJSONArray("data");
-					
-					station_songs = new String[jArray.length()];
-					
-					MainActivity.this.progress.dismiss();
+            try {
+                JSONObject jObject = new JSONObject(result);
+                if (ResultHandler.checkLogStatus(MainActivity.this, jObject)) {
+
+                    //songs object
+                    JSONArray jArray = jObject.getJSONArray("data");
+
+                    station_songs = new String[jArray.length()];
+
+                    MainActivity.this.progress.dismiss();
 
                     GlobalContext.setStationIndex(position);
 
-					//go to activity
-					Intent intent = new Intent(getApplicationContext(), StreamingMp3Player.class);
-					intent.putExtra("station_songs_json", jArray.toString());
-					intent.putExtra("station_id", station_id);
-					startActivity(intent);
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+                    //go to activity
+                    Intent intent = new Intent(getApplicationContext(), StreamingMp3Player.class);
+                    intent.putExtra("station_songs_json", jArray.toString());
+                    intent.putExtra("station_id", station_id);
+                    startActivity(intent);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             MainActivity.this.progress.dismiss();
 
-            if(GlobalContext.getSessionExpired()){
+            if (GlobalContext.getSessionExpired()) {
                 clearSessionInfo();
             }
-			
-		}
-		 
-	 }
-	 
-	 private class GetStationsRequestListener implements RequestListener<String> {
 
-		@Override
-		public void onRequestFailure(SpiceException e) {
-			Log.d(getClass().getSimpleName(), "onRequestFailure");
-		}
+        }
 
-		@Override
-		public void onRequestSuccess(String result) {
+    }
 
-			try {
-				JSONObject jObject = new JSONObject(result);
-				if (ResultHandler.checkLogStatus(MainActivity.this, jObject)) {
+    private class GetStationsRequestListener implements RequestListener<String> {
 
-					JSONArray jArray = jObject.getJSONArray("data");
-					
-					for (int i = 0 ; i < jArray.length(); i++) {
-						JSONObject j = jArray.getJSONObject(i);
-						Station station = new Station();
-						station.setId(j.getString("id"));
-						station.setTitle(j.getString("name"));
-						station.setFavorite(j.getString("is_favorite"));
+        @Override
+        public void onRequestFailure(SpiceException e) {
+            Log.d(getClass().getSimpleName(), "onRequestFailure");
+        }
+
+        @Override
+        public void onRequestSuccess(String result) {
+
+            try {
+                JSONObject jObject = new JSONObject(result);
+                if (ResultHandler.checkLogStatus(MainActivity.this, jObject)) {
+
+                    JSONArray jArray = jObject.getJSONArray("data");
+
+                    for (int i = 0; i < jArray.length(); i++) {
+                        JSONObject j = jArray.getJSONObject(i);
+                        Station station = new Station();
+                        station.setId(j.getString("id"));
+                        station.setTitle(j.getString("name"));
+                        station.setFavorite(j.getString("is_favorite"));
                         station.setImage(j.getString("image"));
-						stations.add(station);
-					}
-					
-					renderStations(stations);
-					MainActivity.this.progress.dismiss();
-				}
-                MainActivity.this.progress.dismiss();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+                        stations.add(station);
+                    }
 
-            if(GlobalContext.getSessionExpired()){
+                    renderStations(stations);
+                    MainActivity.this.progress.dismiss();
+                }
+                MainActivity.this.progress.dismiss();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if (GlobalContext.getSessionExpired()) {
                 clearSessionInfo();
             }
-		}
-		 
-	 }
+        }
+
+    }
 }

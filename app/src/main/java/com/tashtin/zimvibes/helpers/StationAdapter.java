@@ -18,29 +18,29 @@ public class StationAdapter extends ArrayAdapter<Station> {
 
     public ImageLoader imageLoader;
 
-	public StationAdapter(Activity activity, List<Station> stations) {
-		super(activity, R.layout.row_station, stations);
+    public StationAdapter(Activity activity, List<Station> stations) {
+        super(activity, R.layout.row_station, stations);
         imageLoader = new ImageLoader(activity.getApplicationContext());
-	}
-	
+    }
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
-    	View row = convertView;
-    	if(row == null){
-    		row = LayoutInflater.from(getContext()).inflate(R.layout.row_station, parent, false);
-    	}
-    	Station item = getItem(position);
-    	TextView title = (TextView) row.findViewById(R.id.stationTitle);
-    	title.setText(item.getTitle());
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View row = convertView;
+        if (row == null) {
+            row = LayoutInflater.from(getContext()).inflate(R.layout.row_station, parent, false);
+        }
+        Station item = getItem(position);
+        TextView title = (TextView) row.findViewById(R.id.stationTitle);
+        title.setText(item.getTitle());
 
         ImageView img = (ImageView) row.findViewById(R.id.stationImage);
 
         imageLoader.DisplayImage(item.getImage(), img);
-    	
-    	if(GlobalContext.getStationIndex() == position)
-    	   row.setBackgroundResource(R.color.theme_gray);
-    	
-    	return row;
+
+        if (GlobalContext.getStationIndex() == position)
+            row.setBackgroundResource(R.color.theme_gray);
+
+        return row;
     }
 
 }
